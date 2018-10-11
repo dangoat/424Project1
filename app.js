@@ -12,7 +12,7 @@ export class Container extends React.Component {
 }
 
 export default GoogleApiComponent({
-  apiKey: __GAPI_KEY__
+  apiKey: AIzaSyA1gp0ei-MhgYtXkujaXY3RqWY8Fric0rg
 })(Container)
 
 export class Map extends React.Component {
