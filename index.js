@@ -1,8 +1,9 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const store = require('./store')
+var path    = require("path");
 const app = express()
-app.use(express.static('public'))
+app.use(express.static('/public'))
 app.use(bodyParser.json())
 app.post('/createUser', (req, res) => {
   store
@@ -12,6 +13,11 @@ app.post('/createUser', (req, res) => {
     })
     .then(() => res.sendStatus(200))
 })
+
+app.get('/', function(req, res){
+  res.sendFile(path.join(__dirname+'/index.html'));
+});
+
 app.listen(7555, () => {
   console.log('Server running on http://localhost:7555')
 })
