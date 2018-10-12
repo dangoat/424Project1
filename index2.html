@@ -102,11 +102,26 @@
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
       function initAutocomplete() {
+      	var myLatlng = {lat: 39.2904, lng: -76.6122}
         var map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -33.8688, lng: 151.2195},
+          center: myLatlng,
           zoom: 13,
           mapTypeId: 'roadmap'
         });
+
+        var icon = {
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25)
+        };
+
+        var marker = new google.maps.Marker({
+          		map: map,
+          		position: myLatlng,
+          		draggable: true,
+          		title: myLatlng.lat.toFixed(3).toString() + ', ' + myLatlng.lng.toFixed(3).toString()
+       		 });
 
         // Create the search box and link it to the UI element.
         var input = document.getElementById('pac-input');
@@ -118,7 +133,14 @@
           searchBox.setBounds(map.getBounds());
         });
 
-        var markers = [];
+        marker.addListener('dragend', function() {
+        	var lat = marker.getPosition().lat();
+        	var lng = marker.getPosition().lng();
+        	var cur = {lat:lat, lng:lng};
+        	marker.setTitle(lat.toFixed(3).toString() + ', ' + lng.toFixed(3).toString());
+        });
+
+        //var markers = [];
         // Listen for the event fired when the user selects a prediction and retrieve
         // more details for that place.
         searchBox.addListener('places_changed', function() {
@@ -129,10 +151,10 @@
           }
 
           // Clear out the old markers.
-          markers.forEach(function(marker) {
+          /*markers.forEach(function(marker) {
             marker.setMap(null);
           });
-          markers = [];
+          markers = [];*/
 
           // For each place, get the icon, name and location.
           var bounds = new google.maps.LatLngBounds();
@@ -141,21 +163,21 @@
               console.log("Returned place contains no geometry");
               return;
             }
-            var icon = {
-              url: place.icon,
-              size: new google.maps.Size(71, 71),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(17, 34),
-              scaledSize: new google.maps.Size(25, 25)
-            };
-
+            
+            marker.setPosition(place.geometry.location);
+            var lat = marker.getPosition().lat();
+        	var lng = marker.getPosition().lng();
+        	var cur = {lat:lat, lng:lng};
+        	marker.setTitle(lat.toFixed(3).toString() + ', ' + lng.toFixed(3).toString());
+            /*var lat = marker.getPosition().lat().toString();
+            marker.setTitle(lat);*/
             // Create a marker for each place.
-            markers.push(new google.maps.Marker({
+            /*markers.push(new google.maps.Marker({
               map: map,
               icon: icon,
               title: place.name,
               position: place.geometry.location
-            }));
+            }));*/
 
             if (place.geometry.viewport) {
               // Only geocodes have viewport.
