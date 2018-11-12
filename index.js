@@ -16,7 +16,7 @@ app.post('/createUser', (req, res) => {
 })
 
 app.get('/', function(req, res){
-  res.sendFile(path.join(__dirname+'/index2.html'));
+  res.sendFile(path.join(__dirname+'/index.html'));
 });
 
 app.listen(7555, () => {
