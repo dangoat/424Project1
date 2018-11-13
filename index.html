@@ -6,9 +6,16 @@
 <body>
   <form class="CreateUser">
     <h1>Create a new user</h1>
-    <input type="text" class="username" placeholder="username">
+    <input type="text" class="name" placeholder="name">
+    <input type="text" class="email" placeholder="email">
     <input type="password" class="password" placeholder="password">
+    <input type="number" class="publisher" min="0" max="1" placeholder = 0>
     <input type="submit" value="Create user">
+  </form>
+  <form class="QueryUser">
+  	<h1>Query a user</h1>
+  	<input type="text" class="name" placeholder="name">
+  	<input type="submit" value="Query user">
   </form>
   <script src="app.js"></script>
 </body>

@@ -9,10 +9,20 @@ app.use(bodyParser.json())
 app.post('/createUser', (req, res) => {
   store
     .createUser({
-      username: req.body.username,
-      password: req.body.password
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      publisher: req.body.publisher
     })
     .then(() => res.sendStatus(200))
+})
+
+app.post('/queryUser', (req, res) => {
+	store
+		.queryUser({
+			name: req.body.name
+		})
+	res.sendStatus(200)
 })
 
 app.get('/', function(req, res){
