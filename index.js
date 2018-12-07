@@ -59,10 +59,10 @@ app.post('/verifyUser', (req,res) => {
   if(req.body.entered == code.toString()){
   	  store
     .createUser({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      publisher: req.body.publisher
+      name: name,
+      email: email,
+      password: password,
+      publisher: publisher
     })
     .then(() => res.sendStatus(200))
     res.sendFile(__dirname + '/index.html')
