@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Node database tutorial</title>
+  <title>424 Map</title>
 </head>
 <body>
-  <form class="CreateUser">
+  <form class="CreateUser" action="/createUser" method="POST">
     <h1>Create a new user</h1>
-    <input type="text" class="name" placeholder="name">
-    <input type="text" class="email" placeholder="email">
-    <input type="password" class="password" placeholder="password">
-    <input type="number" class="publisher" min="0" max="1" placeholder = 0>
+    <input type="text" name="name" placeholder="name">
+    <input type="text" name="email" placeholder="email">
+    <input type="password" name="password"  placeholder="password">
+    <input type="number" name="publisher" min="0" max="1" placeholder = 0>
     <input type="submit" value="Create user">
   </form>
+
+
   <form class="QueryUser">
   	<h1>Query a user</h1>
   	<input type="text" class="name" placeholder="name">
