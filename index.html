@@ -1,24 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>424 Map</title>
+	<title>424 Map</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 </head>
 <body>
-  <form class="CreateUser" action="/createUser" method="POST">
-    <h1>Create a new user</h1>
-    <input type="text" name="name" placeholder="name">
-    <input type="text" name="email" placeholder="email">
-    <input type="password" name="password"  placeholder="password">
-    <input type="number" name="publisher" min="0" max="1" placeholder = 0>
-    <input type="submit" value="Create user">
-  </form>
+	<div class="jumbotron bg-info">
+	  <h1>424 Project</h1> 
+	  <p>Daniel Evans and Andrew Schlusberg</p> 
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm">
+				<h2>Log in</h2>
+				<form action="/login" method="POST">
+					<div class="form-group">					
+						<input class="form-control" type="text" name="email" placeholder="email">
+					</div>
+					<div class="form-group">
+						<input class="form-control" type="password" name="password"  placeholder="password">
+					</div>
+					<div class="form-group">
+						<input class="btn btn-primary" type="submit" value="Log In">
+					</div>
+				</form>
+			</div>
+			<div class="col-lg">
+				<h2>New User</h2>
+				<form action="/createUser" method="POST">
+
+					<div class="form-group">
+						<input class="form-control" type="text" name="name" placeholder="name">
+					</div>
+					<div class="form-group">					
+						<input class="form-control" type="text" name="email" placeholder="email">
+					</div>
+					<div class="form-group">
+						<input class="form-control" type="password" name="password"  placeholder="password">
+					</div>
+
+					<div class="form-check-inline">
+					  <label class="form-check-label">
+					    <input type="radio" class="form-check-input" name="publisher" id="publisher"> Publisher
+					  </label>
+					</div>
+					<div class="form-check-inline">
+					  <label class="form-check-label">
+					    <input type="radio" class="form-check-input" name="publisher" id="reader">Reader
+					  </label>
+					</div>
+					<div class="form-group">
+						<input class="btn btn-primary" type="submit" value="Create user">
+					</div>
+				</form>
 
 
-  <form class="QueryUser">
-  	<h1>Query a user</h1>
-  	<input type="text" class="name" placeholder="name">
-  	<input type="submit" value="Query user">
-  </form>
-  <script src="app.js"></script>
+				
+			</div>
+			<div class="col-sm">
+				<form class="QueryUser">
+					<h2>Query a user</h2>
+					<input type="text" class="name" placeholder="name">
+					<input type="submit" value="Query user">
+				</form>
+			</div>
+		</div>
+
+	</div>
+
+	<script src="app.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 </body>
 </html>

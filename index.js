@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const store = require('./store')
 var path    = require("path");
 var nodemailer = require('nodemailer');
+
 const app = express()
 
 var name;
@@ -53,6 +54,10 @@ app.post('/createUser', (req, res) => {
 	})
 })
 
+app.post('/login', (req,res) => {
+	res.sendFile(path.join(__dirname + '/publisher.html'))
+})
+
 
 app.post('/verifyUser', (req,res) => {
   console.log(req.body)
@@ -78,6 +83,21 @@ app.post('/queryUser', (req, res) => {
 		})
 	res.sendStatus(200)
 })
+
+
+app.post('/postStory', (req, res) => {
+	console.log('post Story')
+})
+
+app.post('/searchStories', (req, res) => {
+	console.log('search Story:' + req.body.phrase)
+
+})
+
+app.post('/searchCategories', (req, res) => {
+	console.log('search category:' + req.body.category)
+})
+
 
 app.get('/', function(req, res){
   res.sendFile(path.join(__dirname+'/index.html'));
