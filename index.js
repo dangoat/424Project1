@@ -55,7 +55,23 @@ app.post('/createUser', (req, res) => {
 })
 
 app.post('/login', (req,res) => {
-	res.sendFile(path.join(__dirname + '/publisher.html'))
+
+
+	//used to login by checking database
+	/*
+	store.loginUser({
+		email = req.body.email,
+		password = req.body.password
+	})
+
+	res.sendStatus(200)
+	*/
+
+	//testing purpose to login as reader
+	res.sendFile(__dirname + '/reader.html')
+	//testing purpose to login as publisher
+	//res.sendFile(__dirname + '/publisher.html')
+
 })
 
 

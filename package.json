@@ -4,6 +4,7 @@
   "description": "described",
   "main": "index.js",
   "dependencies": {
+    "alert-node": "^1.2.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "google-map-react": "^1.0.9",
