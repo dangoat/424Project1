@@ -4,6 +4,7 @@ const store = require('./store')
 var path    = require("path");
 var nodemailer = require('nodemailer');
 var mysql = require('mysql');
+var alert = require('alert-node')
 
 
 var con = mysql.createConnection({
