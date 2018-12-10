@@ -58,10 +58,14 @@
 				
 			</div>
 			<div class="col-sm">
-				<form class="QueryUser">
-					<h2>Query a user</h2>
-					<input type="text" class="name" placeholder="name">
-					<input type="submit" value="Query user">
+				<h2>Query a user</h2>
+        <form action="/queryUser" method="POST">
+          <div class="form-group">          
+            <input class="form-control" type="text" name="name" placeholder="name">
+          </div>
+          <div class="form-group">
+            <input class="btn btn-primary" type="submit" value="Query user">
+          </div>
 				</form>
 			</div>
 		</div>
