@@ -73,7 +73,12 @@ app.post('/login', (req,res) => {
 	res.render('reader.ejs', {posts: [1,2,3,4,5]})
 	//testing purpose to login as publisher
 	/*res.render('publisher.ejs', {
-		posts: [1,2,3,4,5], 
+		posts: [
+			{name: 'Dan',
+			category: 'Colors',
+			description: 'blue, red , yellow'
+			}
+		] 
 	})*/
 
 })
@@ -105,6 +110,8 @@ app.post('/queryUser', (req, res) => {
 })
 
 
+// Publisher end points
+
 app.post('/postStory', (req, res) => {
 	console.log('post Story')
 	store
@@ -119,18 +126,33 @@ app.post('/postStory', (req, res) => {
       Media: req.body.pic
 		})
     .then(() => res.sendStatus(200))
-    res.sendFile(path.join(__dirname+'/publisher.html'));
+    res.render('publisher.ejs');
 })
 
 app.post('/searchStories', (req, res) => {
+  store
+    .searchStories({
+      Category: req.body.category
+      Latitude: req.body.lat
+      Longitude: req.body.long
+    })
+    .then(() => res.sendStatus(200))
 	res.render('publisher.ejs', {posts: [req.body.category]})
 
 })
 
+app.post('/addCategory', (req, res) => {
+	console.log('Add category:' + req.body.categoryname)
+})
+
+// Reader end points
+
 app.post('/findStories', (req, res) =>{
-	console.log(cur)
+	
 	res.render('reader.ejs', {posts: [req.body]})
 })
+
+
 
 
 app.get('/', function(req, res){
