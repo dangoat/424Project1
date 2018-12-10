@@ -75,15 +75,11 @@ var query = "SELECT publisher FROM user where email = " + mysql.escape(req.body.
     
     con.query(query, function(err,result,fields) {
       if (err) throw err;
-
-      if(typeof result == undefined || typeof result[0] == undefined){
-      	
+      if(result === undefined || result.length == 0){
       	alert('Invalid email or password.')
-      	res.sendFile(__dirname + '/index.html')
-      	      
+      	res.sendFile(__dirname + '/index.html')     
       }
-
-      if(result[0]['publisher'] == 0){
+      else if(result[0]['publisher'] == 0){
         res.render('reader.ejs')
       } else if (result[0]['publisher'] == 1){
         res.render('publisher.ejs')
