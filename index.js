@@ -60,17 +60,20 @@ app.post('/login', (req,res) => {
 
 
 	//used to login by checking database
-	/*
+	
 	store.loginUser({
 		email = req.body.email,
 		password = req.body.password
 	})
 
+	email = req.body.email;
+	password = req.body.password;
+
 	res.sendStatus(200)
-	*/
+	
 
 	//testing purpose to login as reader
-	res.render('reader.ejs', {posts: [1,2,3,4,5]})
+	//res.render('reader.ejs', {posts: [1,2,3,4,5]})
 	//testing purpose to login as publisher
 	/*res.render('publisher.ejs', {
 		posts: [
