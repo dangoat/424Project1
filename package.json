@@ -6,6 +6,7 @@
   "dependencies": {
     "alert-node": "^1.2.3",
     "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
     "express": "^4.16.4",
     "google-map-react": "^1.0.9",
     "jquery": "^3.3.1",

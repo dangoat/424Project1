@@ -1,6 +1,7 @@
 const CreateUser = document.querySelector('.CreateUser')
 const QueryUser = document.querySelector('.QueryUser')
 
+
 /*
 CreateUser.addEventListener('submit', (e) => {
   e.preventDefault()
@@ -18,6 +19,8 @@ QueryUser.addEventListener('submit', (e) => {
 })
 
 */
+
+
 function post (path, data) {
   return window.fetch(path, {
     method: 'POST',

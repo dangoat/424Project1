@@ -4,6 +4,8 @@ const store = require('./store')
 var path    = require("path");
 var nodemailer = require('nodemailer');
 
+var ejs = require('ejs')
+
 const app = express()
 
 var name;
@@ -68,9 +70,12 @@ app.post('/login', (req,res) => {
 	*/
 
 	//testing purpose to login as reader
-	res.sendFile(__dirname + '/reader.html')
+	//res.sendFile(__dirname + '/reader.html')
 	//testing purpose to login as publisher
-	//res.sendFile(__dirname + '/publisher.html')
+	res.render('publisher.ejs', {
+		posts: [1,2,3,4,5], 
+		categories: ["blue", 'red']
+	})
 
 })
 
@@ -106,12 +111,12 @@ app.post('/postStory', (req, res) => {
 })
 
 app.post('/searchStories', (req, res) => {
-	console.log('search Story:' + req.body.phrase)
+	res.render('publisher.ejs', {posts: [req.body.phrase]})
 
 })
 
 app.post('/searchCategories', (req, res) => {
-	console.log('search category:' + req.body.category)
+	res.render('publisher.ejs', {categories: [req.body.category]})
 })
 
 
