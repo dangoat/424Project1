@@ -3,6 +3,15 @@ const bodyParser = require('body-parser')
 const store = require('./store')
 var path    = require("path");
 var nodemailer = require('nodemailer');
+var mysql = require('mysql');
+
+
+var con = mysql.createConnection({
+  host: 'ls-d5e856bd4792d1c8400c321d9e6e0c10c3ffc9e8.c0o4lddlobrx.us-east-1.rds.amazonaws.com',
+  user: 'dbmasteruser',
+  password: 'password',
+  database: 'Project'
+});
 
 var ejs = require('ejs')
 
@@ -61,15 +70,41 @@ app.post('/login', (req,res) => {
 
 	//used to login by checking database
 	
-	store.loginUser({
-		email = req.body.email,
-		password = req.body.password
-	})
+var query = "SELECT publisher FROM user where email = " + mysql.escape(req.body.email) + " AND password = " + mysql.escape(req.body.password);
+    
+    con.query(query, function(err,result,fields) {
+      if (err) throw err;
+      if(result[0]['publisher'] == 0){
+        res.render('reader.ejs')
+      } else if (result[0]['publisher'] == 1){
+        res.render('publisher.ejs')
+      } else {
+        alert('Invalid username or password.')
+        res.sendFile(__dirname + '/index.html')
+      }
+    })
+
+  /*store.loginUser({
+    email: req.body.email,
+    password: req.body.password
+  })
+  .then(function(result) {
+    console.log(result)
+  })*/
+
+	/*if (store.loginUser({
+		email: req.body.email,
+		password: req.body.password
+	})) {
+    res.render('publisher.ejs')
+  } else {
+    res.render('reader.ejs')
+  }*/
 
 	email = req.body.email;
 	password = req.body.password;
 
-	res.sendStatus(200)
+	//res.sendStatus(200)
 	
 
 	//testing purpose to login as reader
@@ -136,8 +171,8 @@ app.post('/postStory', (req, res) => {
 app.post('/searchStories', (req, res) => {
   store
     .searchStories({
-      Category: req.body.category
-      Latitude: req.body.lat
+      Category: req.body.category,
+      Latitude: req.body.lat,
       Longitude: req.body.long
     })
     .then(() => res.sendStatus(200))

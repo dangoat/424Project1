@@ -75,19 +75,20 @@ module.exports = {
   	email = data.email;
   	password = data.password;
 
-  	var query = "SELECT type FROM user where email = " + mysql.escape(email) + " AND password = " + mysql.escape(password);
+  	var query = "SELECT publisher FROM user where email = " + mysql.escape(email) + " AND password = " + mysql.escape(password);
   	
-  	con.query(query, function(err,result,fields) {
-  		if (err) throw err;
-  		if(result[0]['type'] == 0){
+  	return (con.query(query, function(err,result,fields) {
+      return result[0]['publisher']
+  		/*if (err) throw err;
+  		if(result[0]['publisher'] == 0){
   			res.render('reader.ejs')
-  		} else if (result[0]['type'] == 1){
+  		} else if (result[0]['publisher'] == 1){
   			res.render('publisher.ejs')
   		} else {
   			alert('Invalid username or password.')
   			res.sendFile(__dirname + '/index.html')
-  		}
-  	})
+  		}*/
+  	}))
   },
 
   searchStories(data) {
