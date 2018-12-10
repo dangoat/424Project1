@@ -62,8 +62,8 @@ app.post('/login', (req,res) => {
 	//used to login by checking database
 	
 	store.loginUser({
-		email = req.body.email,
-		password = req.body.password
+		email: req.body.email,
+		password: req.body.password
 	})
 
 	email = req.body.email;
@@ -136,8 +136,8 @@ app.post('/postStory', (req, res) => {
 app.post('/searchStories', (req, res) => {
   store
     .searchStories({
-      Category: req.body.category
-      Latitude: req.body.lat
+      Category: req.body.category,
+      Latitude: req.body.lat,
       Longitude: req.body.long
     })
     .then(() => res.sendStatus(200))
