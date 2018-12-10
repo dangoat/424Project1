@@ -60,6 +60,7 @@ module.exports = {
       Categories,
       Media
     })
+},
 
   loginUser(data) {
   	email = data.email;
