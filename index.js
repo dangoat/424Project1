@@ -70,16 +70,16 @@ app.post('/login', (req,res) => {
 	*/
 
 	//testing purpose to login as reader
-	//res.render('reader.ejs', {posts: [1,2,3,4,5]})
+	res.render('reader.ejs', {posts: [1,2,3,4,5]})
 	//testing purpose to login as publisher
-	res.render('publisher.ejs', {
+	/*res.render('publisher.ejs', {
 		posts: [
 			{name: 'Dan',
 			category: 'Colors',
 			description: 'blue, red , yellow'
 			}
 		] 
-	})
+	})*/
 
 })
 
@@ -126,7 +126,7 @@ app.post('/postStory', (req, res) => {
       Media: req.body.pic
 		})
     .then(() => res.sendStatus(200))
-    res.sendFile(path.join(__dirname+'/publisher.html'));
+    res.render('publisher.ejs');
 })
 
 app.post('/searchStories', (req, res) => {
@@ -141,7 +141,7 @@ app.post('/addCategory', (req, res) => {
 // Reader end points
 
 app.post('/findStories', (req, res) =>{
-	console.log(cur)
+	
 	res.render('reader.ejs', {posts: [req.body]})
 })
 
