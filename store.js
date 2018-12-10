@@ -1,5 +1,6 @@
 const knex = require('knex')(require('./knexfile'))
 var mysql = require('mysql');
+var alert = require('alert-node')
 
 var con = mysql.createConnection({
 	host: 'localhost',
@@ -59,5 +60,23 @@ module.exports = {
       Categories,
       Media
     })
+
+  loginUser(data) {
+  	email = data.email;
+  	password = data.password;
+
+  	var query = "SELECT type FROM user where email = " + mysql.escape(email) + " AND password = " + mysql.escape(password);
+  	
+  	con.query(query, function(err,result,fields) {
+  		if (err) throw err;
+  		if(result[0]['type'] == 0){
+  			res.render('reader.ejs')
+  		} else if (result[0]['type'] == 1){
+  			res.render('publisher.ejs')
+  		} else {
+  			alert('Invalid username or password.')
+  			res.sendFile(__dirname + '/index.html')
+  		}
+  	})
   }
 }

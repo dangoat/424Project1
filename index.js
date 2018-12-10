@@ -4,6 +4,8 @@ const store = require('./store')
 var path    = require("path");
 var nodemailer = require('nodemailer');
 
+var ejs = require('ejs')
+
 const app = express()
 
 var name;
@@ -55,7 +57,25 @@ app.post('/createUser', (req, res) => {
 })
 
 app.post('/login', (req,res) => {
-	res.sendFile(path.join(__dirname + '/publisher.html'))
+
+
+	//used to login by checking database
+	/*
+	store.loginUser({
+		email = req.body.email,
+		password = req.body.password
+	})
+
+	res.sendStatus(200)
+	*/
+
+	//testing purpose to login as reader
+	res.render('reader.ejs', {posts: [1,2,3,4,5]})
+	//testing purpose to login as publisher
+	/*res.render('publisher.ejs', {
+		posts: [1,2,3,4,5], 
+	})*/
+
 })
 
 
@@ -103,12 +123,13 @@ app.post('/postStory', (req, res) => {
 })
 
 app.post('/searchStories', (req, res) => {
-	console.log('search Story:' + req.body.phrase)
+	res.render('publisher.ejs', {posts: [req.body.category]})
 
 })
 
-app.post('/searchCategories', (req, res) => {
-	console.log('search category:' + req.body.category)
+app.post('/findStories', (req, res) =>{
+	console.log(cur)
+	res.render('reader.ejs', {posts: [req.body]})
 })
 
 
