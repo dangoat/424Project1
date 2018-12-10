@@ -134,6 +134,13 @@ app.post('/postStory', (req, res) => {
 })
 
 app.post('/searchStories', (req, res) => {
+  store
+    .searchStories({
+      Category: req.body.category
+      Latitude: req.body.lat
+      Longitude: req.body.long
+    })
+    .then(() => res.sendStatus(200))
 	res.render('publisher.ejs', {posts: [req.body.category]})
 
 })
