@@ -41,7 +41,6 @@ module.exports = {
   },
 
   postStory (data) {
-  	UserID = data.UserID
 	Content = data.Content
 	StartTime = data.StartTime
 	EndTime = data.EndTime
@@ -50,6 +49,16 @@ module.exports = {
 	Categories = data.Categories
 	Media = data.Media
 	console.log(`Content ${Content}`)
+
+	var UserID;
+
+	var query = "SELECT UserID FROM user WHERE email = " + mysql.escape(data.email) + " AND password = " + mysql.escape(data.password);
+	con.query(query, function(err,result,fields) {
+		if (err) throw err;
+		UserID = result[0]['UserID'];
+	})
+
+
 	return knex('message_table').insert({
       UserID,
       Content,

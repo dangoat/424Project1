@@ -116,7 +116,8 @@ app.post('/postStory', (req, res) => {
 	console.log('post Story')
 	store
 		.postStory({
-			UserID: req.body.name,
+			Email: email,
+			Password: password,
 			Content: req.body.comment,
 			StartTime: req.body.starttime,
 			EndTime: req.body.endtime,
