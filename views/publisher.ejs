@@ -50,40 +50,42 @@
 				<h2>Search Stories</h2>
 				<form action="/searchStories" method="POST">
 					<div class="form-group">
-						<label for="phrase">Phrase:</label>
-						<input class="form-control" type="text" name="phrase">
-					</div>
-					<div class="form-group">
-						<input class="btn btn-primary" type="submit" value="Search">
-					</div>
-				</form>
-				<% if (typeof posts != 'undefined'){ %>
-				<ul class="list-group">
-					<% posts.forEach((post) => { %>
-						<li class="list-group-item"><%= post %></li>
-					<% }) %>
-				</ul>
-				<% } %>
-			</div>
-			<div class="col-sm">
-				<h2>Search Categories</h2>
-				<form action="/searchCategories" method="POST">
-					<div class="form-group">
-						<label for="category">Category:</label>
+						<label for="phrase">Category:</label>
 						<input class="form-control" type="text" name="category">
 					</div>
 					<div class="form-group">
+						<label for="phrase">Latitude:</label>
+						<input class="form-control" type="number" name="lat">
+					</div>
+					<div class="form-group">
+						<label for="phrase">Longitude:</label>
+						<input class="form-control" type="number" name="long">
+					</div>
+					<div class="form-group">
+						<label for="phrase">Range:</label>
+						<input class="form-control" type="number" min="0" name="range">
+					</div>
+					<div class="form-group">
+						<label for="phrase">Duration:</label>
+						<input class="form-control" type="number" min="0" name="duration">
+					</div>
+					<div class="form-group">
 						<input class="btn btn-primary" type="submit" value="Search">
 					</div>
 				</form>
-				<% if (typeof categories != 'undefined'){ %>
+
+			</div>
+			<div class="col-sm">
+				<% if (typeof posts != 'undefined'){ %>
+				<h2>Results:</h2>
 				<ul class="list-group">
-					<% categories.forEach((cat) => { %>
-						<li class="list-group-item"><%= cat %></li>
+					<% posts.forEach((post) => { %>
+						<li class="list-group-item">
+							<%= post %>		
+						</li>
 					<% }) %>
 				</ul>
 				<% } %>
-
 			</div>
 		</div>
 	</div>

@@ -70,12 +70,11 @@ app.post('/login', (req,res) => {
 	*/
 
 	//testing purpose to login as reader
-	//res.sendFile(__dirname + '/reader.html')
+	res.render('reader.ejs', {posts: [1,2,3,4,5]})
 	//testing purpose to login as publisher
-	res.render('publisher.ejs', {
+	/*res.render('publisher.ejs', {
 		posts: [1,2,3,4,5], 
-		categories: ["blue", 'red']
-	})
+	})*/
 
 })
 
@@ -111,12 +110,13 @@ app.post('/postStory', (req, res) => {
 })
 
 app.post('/searchStories', (req, res) => {
-	res.render('publisher.ejs', {posts: [req.body.phrase]})
+	res.render('publisher.ejs', {posts: [req.body.category]})
 
 })
 
-app.post('/searchCategories', (req, res) => {
-	res.render('publisher.ejs', {categories: [req.body.category]})
+app.post('/findStories', (req, res) =>{
+	console.log(cur)
+	res.render('reader.ejs', {posts: [req.body]})
 })
 
 

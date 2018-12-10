@@ -48,9 +48,9 @@ module.exports = {
   	con.query(query, function(err,result,fields) {
   		if (err) throw err;
   		if(result[0]['type'] == 0){
-  			res.sendFile(__dirname + '/reader.html')
+  			res.render('reader.ejs')
   		} else if (result[0]['type'] == 1){
-  			res.sendFile(__dirname + '/publisher.html')
+  			res.render('publisher.ejs')
   		} else {
   			alert('Invalid username or password.')
   			res.sendFile(__dirname + '/index.html')
