@@ -25,6 +25,7 @@ module.exports = {
 
   queryUser (data) {
   	name = data.name
+  	console.log(`Name: ${name}`)
   	var query = "SELECT email FROM user WHERE name = " + mysql.escape(name);
   	//return knex('user').select('email').where('name','=',name)
   	/*con.query(query)
@@ -36,5 +37,27 @@ module.exports = {
   		console.log(result[0]['email']);
   		//return result[0]['email']
   	})
+  },
+
+  postStory (data) {
+  	UserID = data.UserID
+	Content = data.Content
+	StartTime = data.StartTime
+	EndTime = data.EndTime
+	Location = data.Location
+	Range = data.Range
+	Categories = data.Categories
+	Media = data.Media
+	console.log(`Content ${Content}`)
+	return knex('message_table').insert({
+      UserID,
+      Content,
+      StartTime,
+      EndTime,
+      Location,
+      Range,
+      Categories,
+      Media
+    })
   }
 }

@@ -70,7 +70,7 @@ app.post('/verifyUser', (req,res) => {
       publisher: publisher
     })
     .then(() => res.sendStatus(200))
-    res.sendFile(__dirname + '/index.html')
+    res.sendFile(path.join(__dirname + '/index.html'))
   } else {
   	console.log('incorrect code')
   }
@@ -81,12 +81,25 @@ app.post('/queryUser', (req, res) => {
 		.queryUser({
 			name: req.body.name
 		})
-	res.sendStatus(200)
+  res.sendFile(path.join(__dirname+'/index.html'));
 })
 
 
 app.post('/postStory', (req, res) => {
 	console.log('post Story')
+	store
+		.postStory({
+			UserID: req.body.name,
+			Content: req.body.comment,
+			StartTime: req.body.starttime,
+			EndTime: req.body.endtime,
+			Location: req.body.location,
+			Range: req.body.range,
+			Categories: req.body.category,
+      Media: req.body.pic
+		})
+    .then(() => res.sendStatus(200))
+    res.sendFile(path.join(__dirname+'/publisher.html'));
 })
 
 app.post('/searchStories', (req, res) => {
