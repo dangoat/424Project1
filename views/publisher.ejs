@@ -16,12 +16,12 @@
 				<form action="/postStory" method="POST">
 					<div class="form-group">
 						<label for="starttime">Start Time:</label>
-						<input class="form-control" type="date" name="starttime">
+						<input class="form-control" type="date" name="starttime" required>
 					</div>
 
 					<div class="form-group">
 						<label for="endtime">End Time:</label>
-						<input class="form-control" type="date" name="endtime">
+						<input class="form-control" type="date" name="endtime" required>
 					</div>
 
 					<div class="form-group">
@@ -31,17 +31,17 @@
 
 					<div class="form-group">
 						<label for="range">Range(miles):</label>
-						<input class="form-control" type="number" name="range" min="0">
+						<input class="form-control" type="number" name="range" min="0" required>
 					</div>
 
 					<div class="form-group">
 						<label for="category">Category:</label>
-						<input class="form-control" type="text" name="category">
+						<input class="form-control" type="text" name="category" required>
 					</div>
 
 					<div class="form-group">
 						<label for="comment">Comment:</label>
-						<textarea class="form-control" rows="5" id="comment" name="comment"></textarea>
+						<textarea class="form-control" rows="5" id="comment" name="comment" required></textarea>
 					</div>
 					<div class="form-group">
 						<input type="file" name="pic" accept="image/*">
@@ -56,7 +56,7 @@
 				<form action="/addCategory" method="POST">
 					<div class="form-group">
 						<label for="categoryname">Name:</label>
-						<input class="form-control" type="text" name="categoryname">
+						<input class="form-control" type="text" name="categoryname" required>
 					</div>
 					<div class="form-group">
 						<label for="parentcategory">Parent Category:</label>

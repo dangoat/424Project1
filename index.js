@@ -205,9 +205,10 @@ app.post('/findStories', (req, res) =>{
 			query += " OR M.Categories LIKE \"%{" + cats[i] + "}%\""
 		}	
 	}
-	query += ");"
+	if (cats.length > 0) {
+		query += ");"
 
-
+	}
 
     console.log(query);
 
