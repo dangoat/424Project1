@@ -74,6 +74,15 @@ app.post('/createUser', (req, res) => {
 app.post('/login', (req,res) => {
 
 
+	var d = new Date().toJSON();
+
+	date = d.toString().split('T')[0].split('-');
+	datenumber = date[0] + date[1] + date[2];
+	console.log(datenumber)
+	var query = "SELECT MessageID from message_table where DATEDIFF("
+
+
+
 var query = "SELECT CategoryName from categories"
 con.query(query, function(err,result,fields) {
 	if(err) throw err;
@@ -256,9 +265,10 @@ app.post('/findStories', (req, res) =>{
 			query += " OR message_table.Categories LIKE \"%{" + cats[i] + "}%\""
 		}	
 	}
-	query += ");"
+	if (cats.length > 0) {
+		query += ");"
 
-
+	}
 
     console.log(query);
 
