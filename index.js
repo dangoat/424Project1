@@ -5,7 +5,11 @@ var path    = require("path");
 var nodemailer = require('nodemailer');
 var mysql = require('mysql');
 var alert = require('alert-node')
+var FileReader = require('filereader')
+const knex = require('knex')(require('./knexfile'))
+const image2base64 = require('image-to-base64');
 
+var reader = new FileReader();
 
 var con = mysql.createConnection({
   host: 'ls-d5e856bd4792d1c8400c321d9e6e0c10c3ffc9e8.c0o4lddlobrx.us-east-1.rds.amazonaws.com',
@@ -23,7 +27,8 @@ var email;
 var password;
 var publisher;
 var code;
-var categorylist
+var id;
+var categorylist = [];
 
 app.use(express.static('public'))
 app.use(bodyParser.json())
@@ -76,9 +81,10 @@ con.query(query, function(err,result,fields) {
 	if(result === undefined || result.length == 0){
 		categorylist = [];
 	} else {
-		for (var i = result.length - 1; i >= 0; i--) {
-			categorylist.push = result[i]['CategoryName'];
-		}
+		result.forEach(function(r) {
+			categorylist.push(r['CategoryName']);
+		});
+    console.log(categorylist)
 		
 	}
 })
@@ -86,7 +92,7 @@ con.query(query, function(err,result,fields) {
 
 //used to login by checking database
 	
-var query = "SELECT publisher FROM user where email = " + mysql.escape(req.body.email) + " AND password = " + mysql.escape(req.body.password);
+var query = "SELECT publisher, id FROM user where email = " + mysql.escape(req.body.email) + " AND password = " + mysql.escape(req.body.password);
     
     con.query(query, function(err,result,fields) {
       if (err) throw err;
@@ -95,8 +101,13 @@ var query = "SELECT publisher FROM user where email = " + mysql.escape(req.body.
       	res.sendFile(__dirname + '/index.html')     
       }
       else if(result[0]['publisher'] == 0){
-        res.render('reader.ejs', categorylist)
+        console.log(categorylist)
+        res.render('reader.ejs', {categories: categorylist})
       } else if (result[0]['publisher'] == 1){
+        email = req.body.email
+        password = req.body.password
+        id = result[0]['id']
+        console.log(id)
         res.render('publisher.ejs')
       } 
     })
@@ -151,36 +162,67 @@ app.post('/queryUser', (req, res) => {
 
 app.post('/postStory', (req, res) => {
 	console.log('post Story')
+  console.log(id)
+  console.log(reader.readAsDataURL(req.body.pic));
+
 	store
 		.postStory({
 			Email: email,
 			Password: password,
+      UserID: id,
 			Content: req.body.comment,
 			StartTime: req.body.starttime,
 			EndTime: req.body.endtime,
-			Location: req.body.location,
+			Latitude: req.body.latitude,
+      Longitude: req.body.longitude,
 			Range: req.body.range,
 			Categories: req.body.category,
-      Media: req.body.pic
+      Media: reader.readAsDataURL(req.body.pic)
 		})
     .then(() => res.sendStatus(200))
     res.render('publisher.ejs');
 })
 
 app.post('/searchStories', (req, res) => {
-  store
+  var query = "SELECT U.name, M.Content, M.Categories, M.Media FROM message_table M, user U \
+                 WHERE id = UserID AND M.Categories = " + mysql.escape(req.body.category) + "\
+                 OR M.range > SQRT(POW(M.Latitude - " + 69*req.body.lat + ", 2) + \
+                 POW(M.Longitude - " + 69*req.body.long + ", 2))";
+  con.query(query, function(err,result,fields) {
+    if(result === undefined || result.length == 0){
+      console.log("empty")
+      res.render('publisher.ejs');
+    }
+    else {
+      posts = [];
+      result.forEach(function(r){
+      console.log(r)
+        posts.push({name: r['name'],
+         category: r['Categories'],
+         media: "data:image/jpg;base64," + r['Media'],
+         description: r['Content']
+        })       
+      });
+      res.render('publisher.ejs', posts)
+    }
+  })
+  /*store
     .searchStories({
       Category: req.body.category,
       Latitude: req.body.lat,
       Longitude: req.body.long
-    })
-    .then(() => res.sendStatus(200))
-	res.render('publisher.ejs', {posts: [req.body.category]})
+    })*/
+	//res.render('publisher.ejs', {posts: [req.body.category]})
 
 })
 
 app.post('/addCategory', (req, res) => {
-	console.log('Add category:' + req.body.categoryname)
+  store.addCategory({
+    CategoryName: req.body.categoryname,
+    Parent: req.body.parentcategory
+  })
+  .then(() => res.sendStatus(200))
+  res.render('publisher.ejs');
 })
 
 // Reader end points
@@ -200,9 +242,9 @@ app.post('/findStories', (req, res) =>{
 
     for (var i = cats.length - 1; i >= 0; i--) {
 		if (i == cats.length-1) {
-			query += " AND (M.Categories LIKE \"%{" + cats[i] + "}%\""
+			query += " AND (message_table.Categories LIKE \"%{" + cats[i] + "}%\""
 		} else {
-			query += " OR M.Categories LIKE \"%{" + cats[i] + "}%\""
+			query += " OR message_table.Categories LIKE \"%{" + cats[i] + "}%\""
 		}	
 	}
 	if (cats.length > 0) {
