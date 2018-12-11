@@ -254,23 +254,30 @@ app.post('/findStories', (req, res) =>{
 	console.log('Long:' + req.body.long)
 	console.log('Categories:' + req.body.categories)
 
-	var cats = req.body.categories.toString().split(',');
+	var query = "SELECT U.name, M.Content, M.Categories, M.Media FROM message_table M \
+	INNER JOIN user U ON U.id = M.UserID WHERE M.range > SQRT(POW(M.Latitude*69 - " + 69*req.body.lat + ", 2) + \
+	POW(M.Longitude*69 - " + 69*req.body.long + ", 2))";
 
-	var query = "SELECT U.name, M.Content, M.Categories FROM message_table M, user U \
-	WHERE M.range > SQRT(POW(M.Latitude - " + 69*req.body.lat + ", 2) + \
-	POW(M.Longitude - " + 69*req.body.long + ", 2))";
-
-	for (var i = cats.length - 1; i >= 0; i--) {
-		if (i == cats.length-1) {
-			query += " AND (message_table.Categories LIKE \"%{" + cats[i] + "}%\""
-		} else {
-			query += " OR message_table.Categories LIKE \"%{" + cats[i] + "}%\""
-		}	
+	var und;
+	if (req.body.categories === undefined) {
+		und = true
 	}
-	if (cats.length > 0) {
-		query += ");"
+	else if (!und || req.body.categories.length != 0){
 
+		var cats = req.body.categories.toString().split(',');
+
+		for (var i = cats.length - 1; i >= 0; i--) {
+			if (i == cats.length-1) {
+				query += " AND (message_table.Categories LIKE \"%" + cats[i] + "%\""
+			} else {
+				query += " OR message_table.Categories LIKE \"%" + cats[i] + "%\""
+			}	
+		}
+		query += ")";
 	}
+
+	query += ";";
+	
 
 	con.query(query, function(err,result,fields) {
 		if(result === undefined || result.length == 0){
