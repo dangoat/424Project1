@@ -6,6 +6,8 @@ var nodemailer = require('nodemailer');
 var mysql = require('mysql');
 var alert = require('alert-node')
 const knex = require('knex')(require('./knexfile'))
+var fs = require('fs');
+//var busboy = require('connect-busboy');
 
 var con = mysql.createConnection({
 	host: 'ls-d5e856bd4792d1c8400c321d9e6e0c10c3ffc9e8.c0o4lddlobrx.us-east-1.rds.amazonaws.com',
@@ -17,6 +19,7 @@ var con = mysql.createConnection({
 var ejs = require('ejs')
 
 const app = express()
+//app.use(busboy());
 
 var name;
 var email;
@@ -169,6 +172,16 @@ app.post('/queryUser', (req, res) => {
 // Publisher end points
 
 app.post('/postStory', (req, res) => {
+  /*var fstream;
+  req.pipe(req.busboy);
+  req.busboy.on('file', function (fieldname,file,filename) {
+    console.log("Uploading: " + filename);
+    fstream = fs.createWriteStream(__dirname + '/files/' + filename);
+    file.pipe(fstream);
+    fstream.on('close', function() {
+      res.redirect('back');
+    });
+  });*/
 	console.log('post Story')
 	console.log(id)
 	console.log(req.body.b64pic);
