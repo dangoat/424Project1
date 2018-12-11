@@ -86,11 +86,16 @@ module.exports = {
 
     var query = "SELECT U.name, M.Content, M.Categories FROM message_table M, user U \
                  WHERE id = UserID AND M.Categories = " + mysql.escape(Category) + " \
-                 AND message_table.Range >= (SQRT(POWER(((message_table.Latitude * 69.0) - (Latitude * 69.0)),2) + POWER(((message_table.Longitude * 69.0) - (Longitude * 69.0)),2)))";
+                 AND M.Range >= (SQRT(POWER(((M.Latitude * 69.0) - (Latitude * 69.0)),2) + POWER(((M.Longitude * 69.0) - (Longitude * 69.0)),2)))";
     con.query(query, function(err,result,fields) {
-      result.forEach(function(result){
+      if(result === undefined || result.length == 0){
+        console.log("empty")
+      }
+      else {
+        result.forEach(function(result){
         console.log(result)
-      });
+        });
+      }
     })
   },
 
