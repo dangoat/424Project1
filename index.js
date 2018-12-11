@@ -5,6 +5,7 @@ var path    = require("path");
 var nodemailer = require('nodemailer');
 var mysql = require('mysql');
 var alert = require('alert-node')
+const knex = require('knex')(require('./knexfile'))
 
 
 var con = mysql.createConnection({
@@ -23,6 +24,7 @@ var email;
 var password;
 var publisher;
 var code;
+var id;
 
 app.use(express.static('public'))
 app.use(bodyParser.json())
@@ -71,7 +73,7 @@ app.post('/login', (req,res) => {
 
 	//used to login by checking database
 	
-var query = "SELECT publisher FROM user where email = " + mysql.escape(req.body.email) + " AND password = " + mysql.escape(req.body.password);
+var query = "SELECT publisher, id FROM user where email = " + mysql.escape(req.body.email) + " AND password = " + mysql.escape(req.body.password);
     
     con.query(query, function(err,result,fields) {
       if (err) throw err;
@@ -82,6 +84,10 @@ var query = "SELECT publisher FROM user where email = " + mysql.escape(req.body.
       else if(result[0]['publisher'] == 0){
         res.render('reader.ejs')
       } else if (result[0]['publisher'] == 1){
+        email = req.body.email
+        password = req.body.password
+        id = result[0]['id']
+        console.log(id)
         res.render('publisher.ejs')
       } 
     })
@@ -152,14 +158,17 @@ app.post('/queryUser', (req, res) => {
 
 app.post('/postStory', (req, res) => {
 	console.log('post Story')
+  console.log(id)
 	store
 		.postStory({
 			Email: email,
 			Password: password,
+      UserID: id,
 			Content: req.body.comment,
 			StartTime: req.body.starttime,
 			EndTime: req.body.endtime,
-			Location: req.body.location,
+			Latitude: req.body.latitude,
+      Longitude: req.body.longitude,
 			Range: req.body.range,
 			Categories: req.body.category,
       Media: req.body.pic
@@ -175,13 +184,17 @@ app.post('/searchStories', (req, res) => {
       Latitude: req.body.lat,
       Longitude: req.body.long
     })
-    .then(() => res.sendStatus(200))
 	res.render('publisher.ejs', {posts: [req.body.category]})
 
 })
 
 app.post('/addCategory', (req, res) => {
-	console.log('Add category:' + req.body.categoryname)
+  store.addCategory({
+    CategoryName: req.body.categoryname,
+    Parent: req.body.parentcategory
+  })
+  .then(() => res.sendStatus(200))
+  res.render('publisher.ejs');
 })
 
 // Reader end points

@@ -9,6 +9,10 @@ var con = mysql.createConnection({
 	database: 'Project'
 });
 
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
 module.exports = {
   createUser (data) {
   	name = data.name
@@ -41,34 +45,28 @@ module.exports = {
   },
 
   postStory (data) {
+  UserID = data.UserID
 	Content = data.Content
 	StartTime = data.StartTime
 	EndTime = data.EndTime
-	Location = data.Location
+	Latitude = data.Latitude
+  Longitude = data.Longitude
 	Range = data.Range
 	Categories = data.Categories
 	Media = data.Media
-	console.log(`Content ${Content}`)
 
-	var UserID;
-
-	var query = "SELECT UserID FROM user WHERE email = " + mysql.escape(data.email) + " AND password = " + mysql.escape(data.password);
-	con.query(query, function(err,result,fields) {
-		if (err) throw err;
-		UserID = result[0]['UserID'];
-	})
-
-
-	return knex('message_table').insert({
+    return knex('message_table').insert({
       UserID,
       Content,
       StartTime,
       EndTime,
-      Location,
+      Latitude,
+      Longitude,
       Range,
       Categories,
       Media
     })
+	
   },
 
   loginUser(data) {
@@ -79,29 +77,31 @@ module.exports = {
   	
   	return (con.query(query, function(err,result,fields) {
       return result[0]['publisher']
-  		/*if (err) throw err;
-  		if(result[0]['publisher'] == 0){
-  			res.render('reader.ejs')
-  		} else if (result[0]['publisher'] == 1){
-  			res.render('publisher.ejs')
-  		} else {
-  			alert('Invalid username or password.')
-  			res.sendFile(__dirname + '/index.html')
-  		}*/
   	}))
   },
 
   searchStories(data) {
   	Category = data.Category
   	Latitude = data.Latitude
-    Longitude = dat.Longitude
+    Longitude = data.Longitude
 
     var query = "SELECT U.name, M.Content, M.Categories FROM message_table M, user U \
-                 WHERE U.id = M.UserID AND M.Categories = " + mysql.escape(Category);
+                 WHERE id = UserID AND M.Categories = " + mysql.escape(Category) + " \
+                 AND message_table.Range >= (SQRT(POWER(((message_table.Latitude * 69.0) - (Latitude * 69.0)),2) + POWER(((message_table.Longitude * 69.0) - (Longitude * 69.0)),2)))";
     con.query(query, function(err,result,fields) {
       result.forEach(function(result){
         console.log(result)
       });
+    })
+  },
+
+  addCategory(data) {
+    CategoryName = data.CategoryName
+    Parent = data.Parent
+
+    return knex('categories').insert({
+      CategoryName,
+      Parent  
     })
   }
 }
