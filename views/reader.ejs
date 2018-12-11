@@ -232,11 +232,15 @@
           <input class="btn btn-primary-inline" type="submit" value="Search">
           <br>
           <% if (typeof posts != 'undefined'){ %>
+          <h2>Results:</h2>
           <ul class="list-group">
             <% posts.forEach((post) => { %>
-            <li class="list-group-item">
-              <%= post %>   
-            </li>
+              <li class="list-group-item" style="display: block">
+                <div><h4><%= post.name %></h4></div>
+                <p>Category: <%= post.category %></p> <br>
+                <img src=<%= post.media %> alt="No Image"> <br>
+                <p><%= post.description %></p>
+              </li>
             <% }) %>
           </ul>
           <% } %>
