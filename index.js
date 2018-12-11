@@ -204,11 +204,27 @@ app.post('/postStory', (req, res) => {
 })
 
 app.post('/searchStories', (req, res) => {
+
+  var cats = req.body.category.toString().split(',');
+
 	var query = "SELECT U.name, M.Content, M.Categories, M.Media FROM message_table M \
-	INNER JOIN user U ON U.id = M.UserID WHERE M.Categories LIKE \"%{" + mysql.escape(req.body.category) + "}%\"\
-	AND M.range > SQRT(POW(M.Latitude * 69 - " + 69*req.body.lat + ", 2) + \
+	INNER JOIN user U ON U.id = M.UserID WHERE \
+	M.range > SQRT(POW(M.Latitude * 69 - " + 69*req.body.lat + ", 2) + \
 	POW(M.Longitude * 69 - " + 69*req.body.long + ", 2))";
-	con.query(query, function(err,result,fields) {
+	
+  for (var i = cats.length - 1; i >= 0; i--) {
+    if (i == cats.length-1) {
+      query += " AND (M.Categories LIKE \"%" + cats[i] + "%\""
+    } else {
+      query += " OR M.Categories LIKE \"%" + cats[i] + "%\""
+    } 
+  }
+  if (cats.length > 0) {
+    query += ");"
+
+  }
+  console.log(query);
+  con.query(query, function(err,result,fields) {
 		if(result === undefined || result.length == 0){
 			posts = [];
 			console.log("empty")
