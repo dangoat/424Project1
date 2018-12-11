@@ -221,10 +221,10 @@
 
           <div class="form-group">
               <label for="exampleFormControlSelect2">Select Categories:</label>
-              <select multiple class="form-control" id="exampleFormControlSelect2">
+              <select multiple class="form-control" id="categories" name="categories">
                 <% if (typeof categories != 'undefined'){ %>
                 <% categories.forEach((category) => { %>
-                <option><%= category %></option>
+                <option value=<%= category %>><%= category %></option>
                 <% })} %>
               </select>
           </div>

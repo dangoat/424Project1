@@ -176,7 +176,7 @@ app.post('/findStories', (req, res) =>{
 
 	console.log('Lat:' + req.body.lat)
 	console.log('Long:' + req.body.long)
-
+	console.log('Categories:' + req.body.categories)
 
 	res.render('reader.ejs', {posts: [req.body]})
 })
