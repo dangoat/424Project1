@@ -26,12 +26,12 @@
 
 					<div class="form-group">
 						<label for="location">Latitude:</label>
-						<input class="form-control" type="number" step="any" name="latitude">
+						<input class="form-control" type="number" step="any" name="latitude" min="-90" max="90" required>
 					</div>
 
 					<div class="form-group">
 						<label for="location">Longitude:</label>
-						<input class="form-control" type="number" step="any" name="longitude">
+						<input class="form-control" type="number" step="any" name="longitude" min="-180" max="180" required>
 					</div>
 
 					<div class="form-group">
@@ -79,11 +79,11 @@
 					</div>
 					<div class="form-group">
 						<label for="phrase">Latitude:</label>
-						<input class="form-control" type="number" step="any" name="lat">
+						<input class="form-control" type="number" step="any" name="lat" min="-90" max="90" required>
 					</div>
 					<div class="form-group">
 						<label for="phrase">Longitude:</label>
-						<input class="form-control" type="number" step="any" name="long">
+						<input class="form-control" type="number" step="any" name="long" min="-180" max="180" required>
 					</div>
 					<div class="form-group">
 						<input class="btn btn-primary" type="submit" value="Search">

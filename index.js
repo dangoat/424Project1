@@ -5,11 +5,7 @@ var path    = require("path");
 var nodemailer = require('nodemailer');
 var mysql = require('mysql');
 var alert = require('alert-node')
-var FileReader = require('filereader')
 const knex = require('knex')(require('./knexfile'))
-const image2base64 = require('image-to-base64');
-
-var reader = new FileReader();
 
 var con = mysql.createConnection({
   host: 'ls-d5e856bd4792d1c8400c321d9e6e0c10c3ffc9e8.c0o4lddlobrx.us-east-1.rds.amazonaws.com',
@@ -73,6 +69,15 @@ app.post('/createUser', (req, res) => {
 })
 
 app.post('/login', (req,res) => {
+
+
+	var d = new Date().toJSON();
+
+	date = d.toString().split('T')[0].split('-');
+	datenumber = date[0] + date[1] + date[2];
+	console.log(datenumber)
+	var query = "SELECT MessageID from message_table where DATEDIFF("
+
 
 
 var query = "SELECT CategoryName from categories"
