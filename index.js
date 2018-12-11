@@ -69,8 +69,8 @@ app.post('/createUser', (req, res) => {
 app.post('/login', (req,res) => {
 
 
-	//used to login by checking database
-	
+//used to login by checking database
+/*	
 var query = "SELECT publisher FROM user where email = " + mysql.escape(req.body.email) + " AND password = " + mysql.escape(req.body.password);
     
     con.query(query, function(err,result,fields) {
@@ -85,30 +85,15 @@ var query = "SELECT publisher FROM user where email = " + mysql.escape(req.body.
         res.render('publisher.ejs')
       } 
     })
+*/
 
-  /*store.loginUser({
-    email: req.body.email,
-    password: req.body.password
-  })
-  .then(function(result) {
-    console.log(result)
-  })*/
-
-	/*if (store.loginUser({
-		email: req.body.email,
-		password: req.body.password
-	})) {
-    res.render('publisher.ejs')
-  } else {
-    res.render('reader.ejs')
-  }*/
-
-
-	//res.sendStatus(200)
 	
 
 	//testing purpose to login as reader
-	//res.render('reader.ejs', {posts: [1,2,3,4,5]})
+	res.render('reader.ejs', {
+		posts: [1,2,3,4,5],
+		categories: ['School', 'Colors']
+	})
 	//testing purpose to login as publisher
 	/*res.render('publisher.ejs', {
 		posts: [
@@ -188,6 +173,11 @@ app.post('/addCategory', (req, res) => {
 
 app.post('/findStories', (req, res) =>{
 	
+
+	console.log('Lat:' + req.body.lat)
+	console.log('Long:' + req.body.long)
+
+
 	res.render('reader.ejs', {posts: [req.body]})
 })
 

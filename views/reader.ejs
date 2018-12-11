@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
-  <title>Places Search Box</title>
+  <title>Reader</title>
   <style>
       /* /* https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
        * Always set the map height explicitly to define the size of the div
@@ -97,12 +97,16 @@
       <h1>Reader</h1> 
     </div>
 
-    <div class="container">
-      <div class="row" style="height: 30em">
-        <div class="col-lg">
-          <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-          <div id="map"></div>
-          <script>
+    <form action="/findStories" method="POST">
+      <input type="hidden" id="lat" name="lat"/>
+      <input type="hidden" id="long" name="long"/>
+
+      <div class="container">
+        <div class="row" style="height: 30em">
+          <div class="col-lg">
+            <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+            <div id="map"></div>
+            <script>
             // This example adds a search box to a map, using the Google Place Autocomplete
             // feature. People can enter geographical searches. The search box will return a
             // pick list containing a mix of places and predicted search terms.
@@ -113,6 +117,8 @@
 
             function initAutocomplete() {
               var myLatlng = {lat: 39.2904, lng: -76.6122}
+              document.getElementById('lat').value = myLatlng['lat'];
+              document.getElementById('long').value = myLatlng['lng'];
               var map = new google.maps.Map(document.getElementById('map'), {
                 center: myLatlng,
                 zoom: 13,
@@ -147,7 +153,8 @@
                 var lat = marker.getPosition().lat();
                 var lng = marker.getPosition().lng();
                 var cur = {lat:lat, lng:lng};
-
+                document.getElementById('lat').value = lat;
+                document.getElementById('long').value = lng;
                 marker.setTitle(lat.toFixed(3).toString() + ', ' + lng.toFixed(3).toString());
               });
 
@@ -179,6 +186,8 @@
                   var lat = marker.getPosition().lat();
                   var lng = marker.getPosition().lng();
                   var cur = {lat:lat, lng:lng};
+                  document.getElementById('lat').value = lat;
+                  document.getElementById('long').value = lng;
 
                   marker.setTitle(lat.toFixed(3).toString() + ', ' + lng.toFixed(3).toString());
                   /*var lat = marker.getPosition().lat().toString();
@@ -208,10 +217,19 @@
         </div>
         <div class="col-lg">
           <h2>Stories</h2>
-          <form action="/findStories" method="POST">
+          
 
-            <input class="btn btn-primary-inline" type="submit" value="Search">
-          </form>
+          <div class="form-group">
+              <label for="exampleFormControlSelect2">Select Categories:</label>
+              <select multiple class="form-control" id="exampleFormControlSelect2">
+                <% if (typeof categories != 'undefined'){ %>
+                <% categories.forEach((category) => { %>
+                <option><%= category %></option>
+                <% })} %>
+              </select>
+          </div>
+
+          <input class="btn btn-primary-inline" type="submit" value="Search">
           <br>
           <% if (typeof posts != 'undefined'){ %>
           <ul class="list-group">
@@ -226,9 +244,10 @@
         
       </div>
     </div>
-    
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-  </body>
-  </html>
+  </form>
+
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</body>
+</html>
