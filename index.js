@@ -119,7 +119,7 @@ app.post('/login', (req,res) => {
 			password = req.body.password
 			id = result[0]['id']
 			console.log(id)
-			res.render('publisher.ejs')
+			res.render('publisher.ejs', {categories: categorylist})
 		} 
 	})
 
@@ -185,6 +185,7 @@ app.post('/postStory', (req, res) => {
 	console.log('post Story')
 	console.log(id)
 	console.log(req.body.b64pic);
+  console.log(req.body.categories.toString());
 	store
 	.postStory({
 		Email: email,
@@ -196,16 +197,16 @@ app.post('/postStory', (req, res) => {
 		Latitude: req.body.latitude,
 		Longitude: req.body.longitude,
 		Range: req.body.range,
-		Categories: req.body.category,
+		Categories: req.body.categories.toString(),
 		Media: req.body.b64pic
 	})
 	.then(() => res.sendStatus(200))
-	res.render('publisher.ejs');
+	res.render('publisher.ejs', {categories: categorylist});
 })
 
 app.post('/searchStories', (req, res) => {
 
-  var cats = req.body.category.toString().split(',');
+  var cats = req.body.categories.toString().split(',');
 
 	var query = "SELECT U.name, M.Content, M.Categories, M.Media FROM message_table M \
 	INNER JOIN user U ON U.id = M.UserID WHERE \
@@ -228,7 +229,7 @@ app.post('/searchStories', (req, res) => {
 		if(result === undefined || result.length == 0){
 			posts = [];
 			console.log("empty")
-			res.render('publisher.ejs');
+			res.render('publisher.ejs', {categories: categorylist});
 		}
 		else {
 			posts = [];
@@ -239,7 +240,7 @@ app.post('/searchStories', (req, res) => {
 					description: r['Content']
 				})       
 			});
-			res.render('publisher.ejs', posts)
+			res.render('publisher.ejs', {posts, categories: categorylist})
 		}
 	})
   /*store
@@ -253,12 +254,21 @@ app.post('/searchStories', (req, res) => {
 })
 
 app.post('/addCategory', (req, res) => {
-	store.addCategory({
+    CategoryName = req.body.categoryname
+    Parent = req.body.parentcategory
+
+    categorylist.push(CategoryName)
+
+    return knex('categories').insert({
+      CategoryName,
+      Parent  
+    })
+
+	/*store.addCategory({
 		CategoryName: req.body.categoryname,
 		Parent: req.body.parentcategory
-	})
-	.then(() => res.sendStatus(200))
-	res.render('publisher.ejs');
+	})*/
+	.then(() => res.render('publisher.ejs', {categories: categorylist}));
 })
 
 // Reader end points
@@ -284,9 +294,9 @@ app.post('/findStories', (req, res) =>{
 
 		for (var i = cats.length - 1; i >= 0; i--) {
 			if (i == cats.length-1) {
-				query += " AND (message_table.Categories LIKE \"%" + cats[i] + "%\""
+				query += " AND (M.Categories LIKE \"%" + cats[i] + "%\""
 			} else {
-				query += " OR message_table.Categories LIKE \"%" + cats[i] + "%\""
+				query += " OR M.Categories LIKE \"%" + cats[i] + "%\""
 			}	
 		}
 		query += ")";
@@ -294,6 +304,8 @@ app.post('/findStories', (req, res) =>{
 
 	query += ";";
 	
+
+  console.log(query)
 
 	con.query(query, function(err,result,fields) {
 		if(result === undefined || result.length == 0){
