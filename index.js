@@ -25,6 +25,7 @@ var password;
 var publisher;
 var code;
 var id;
+var categorylist;
 
 app.use(express.static('public'))
 app.use(bodyParser.json())
@@ -71,7 +72,21 @@ app.post('/createUser', (req, res) => {
 app.post('/login', (req,res) => {
 
 
-	//used to login by checking database
+var query = "SELECT CategoryName from categories"
+con.query(query, function(err,result,fields) {
+	if(err) throw err;
+	if(result === undefined || result.length == 0){
+		categorylist = [];
+	} else {
+		for (var i = result.length - 1; i >= 0; i--) {
+			categorylist.push = result[i]['CategoryName'];
+		}
+		
+	}
+})
+
+
+//used to login by checking database
 	
 var query = "SELECT publisher, id FROM user where email = " + mysql.escape(req.body.email) + " AND password = " + mysql.escape(req.body.password);
     
@@ -82,7 +97,7 @@ var query = "SELECT publisher, id FROM user where email = " + mysql.escape(req.b
       	res.sendFile(__dirname + '/index.html')     
       }
       else if(result[0]['publisher'] == 0){
-        res.render('reader.ejs')
+        res.render('reader.ejs', categorylist)
       } else if (result[0]['publisher'] == 1){
         email = req.body.email
         password = req.body.password
@@ -92,29 +107,13 @@ var query = "SELECT publisher, id FROM user where email = " + mysql.escape(req.b
       } 
     })
 
-  /*store.loginUser({
-    email: req.body.email,
-    password: req.body.password
-  })
-  .then(function(result) {
-    console.log(result)
-  })*/
-
-	/*if (store.loginUser({
-		email: req.body.email,
-		password: req.body.password
-	})) {
-    res.render('publisher.ejs')
-  } else {
-    res.render('reader.ejs')
-  }*/
-
-
-	//res.sendStatus(200)
 	
 
 	//testing purpose to login as reader
-	//res.render('reader.ejs', {posts: [1,2,3,4,5]})
+	/*res.render('reader.ejs', {
+		posts: [1,2,3,4,5],
+		categories: categorylist
+	})*/
 	//testing purpose to login as publisher
 	/*res.render('publisher.ejs', {
 		posts: [
@@ -201,7 +200,31 @@ app.post('/addCategory', (req, res) => {
 
 app.post('/findStories', (req, res) =>{
 	
-	res.render('reader.ejs', {posts: [req.body]})
+
+	console.log('Lat:' + req.body.lat)
+	console.log('Long:' + req.body.long)
+	console.log('Categories:' + req.body.categories)
+
+	var cats = req.body.categories.toString().split(',');
+
+	var query = "SELECT U.name, M.Content, M.Categories FROM message_table M, user U \
+                 WHERE message_table.range > SQRT(POW(message_table.Latitude - " + 69*req.body.lat + ", 2) + \
+                 POW(message_table.Longitude - " + 69*req.body.long + ", 2))";
+
+    for (var i = cats.length - 1; i >= 0; i--) {
+		if (i == cats.length-1) {
+			query += " AND (message_table.Categories LIKE \"%{" + cats[i] + "}%\""
+		} else {
+			query += " OR message_table.Categories LIKE \"%{" + cats[i] + "}%\""
+		}	
+	}
+	query += ");"
+
+
+
+    console.log(query);
+
+	res.render('reader.ejs', {posts: [req.body], categories: categorylist})
 })
 
 

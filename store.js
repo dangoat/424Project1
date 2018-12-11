@@ -1,6 +1,5 @@
 const knex = require('knex')(require('./knexfile'))
 var mysql = require('mysql');
-var alert = require('alert-node')
 
 var con = mysql.createConnection({
 	host: 'ls-d5e856bd4792d1c8400c321d9e6e0c10c3ffc9e8.c0o4lddlobrx.us-east-1.rds.amazonaws.com',
