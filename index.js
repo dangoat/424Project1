@@ -23,6 +23,7 @@ var email;
 var password;
 var publisher;
 var code;
+var categorylist
 
 app.use(express.static('public'))
 app.use(bodyParser.json())
@@ -69,8 +70,22 @@ app.post('/createUser', (req, res) => {
 app.post('/login', (req,res) => {
 
 
+var query = "SELECT CategoryName from categories"
+con.query(query, function(err,result,fields) {
+	if(err) throw err;
+	if(result === undefined || result.length == 0){
+		categorylist = [];
+	} else {
+		for (var i = result.length - 1; i >= 0; i--) {
+			categorylist.push = result[i]['CategoryName'];
+		}
+		
+	}
+})
+
+
 //used to login by checking database
-/*	
+	
 var query = "SELECT publisher FROM user where email = " + mysql.escape(req.body.email) + " AND password = " + mysql.escape(req.body.password);
     
     con.query(query, function(err,result,fields) {
@@ -80,20 +95,19 @@ var query = "SELECT publisher FROM user where email = " + mysql.escape(req.body.
       	res.sendFile(__dirname + '/index.html')     
       }
       else if(result[0]['publisher'] == 0){
-        res.render('reader.ejs')
+        res.render('reader.ejs', categorylist)
       } else if (result[0]['publisher'] == 1){
         res.render('publisher.ejs')
       } 
     })
-*/
 
 	
 
 	//testing purpose to login as reader
-	res.render('reader.ejs', {
+	/*res.render('reader.ejs', {
 		posts: [1,2,3,4,5],
-		categories: ['School', 'Colors']
-	})
+		categories: categorylist
+	})*/
 	//testing purpose to login as publisher
 	/*res.render('publisher.ejs', {
 		posts: [
@@ -178,7 +192,26 @@ app.post('/findStories', (req, res) =>{
 	console.log('Long:' + req.body.long)
 	console.log('Categories:' + req.body.categories)
 
-	res.render('reader.ejs', {posts: [req.body]})
+	var cats = req.body.categories.toString().split(',');
+
+	var query = "SELECT U.name, M.Content, M.Categories FROM message_table M, user U \
+                 WHERE M.range > SQRT(POW(M.Latitude - " + 69*req.body.lat + ", 2) + \
+                 POW(M.Longitude - " + 69*req.body.long + ", 2))";
+
+    for (var i = cats.length - 1; i >= 0; i--) {
+		if (i == cats.length-1) {
+			query += " AND (M.Categories LIKE \"%{" + cats[i] + "}%\""
+		} else {
+			query += " OR M.Categories LIKE \"%{" + cats[i] + "}%\""
+		}	
+	}
+	query += ");"
+
+
+
+    console.log(query);
+
+	res.render('reader.ejs', {posts: [req.body], categories: categorylist})
 })
 
 
